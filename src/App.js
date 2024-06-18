@@ -1,36 +1,21 @@
-import Directory from "./components/directory/directory.component";
+import { Routes, Route } from "react-router-dom";
+import Home from "./routes/home/home.component";
+import Navigation from "./routes/navigation/navigation.component";
+import SignIn from "./routes/sign-in/sign-in.components";
+
+const Shop= ()=> {
+  return <h1>this is shop</h1>
+}
 
 const App = () => {
-  const categories = [
-    {
-      id: 1,
-      title: "hats",
-      imageUrl: "https://images.unsplash.com/photo-1556306535-0f09a537f0a3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 2,
-      title: "jackets",
-      imageUrl: "https://images.unsplash.com/photo-1493568000180-ca2fb70ddcba?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 3,
-      title: "sneakers",
-      imageUrl: "https://cdn.pixabay.com/photo/2016/11/19/18/06/feet-1840619_1280.jpg",
-    },
-    {
-      id: 4,
-      title: "womens",
-      imageUrl: "https://images.unsplash.com/photo-1590649880765-91b1956b8276?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 5,
-      title: "mens",
-      imageUrl: "https://images.unsplash.com/photo-1504593811423-6dd665756598?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-  ];
-
   return (
-    <Directory categories={categories}/>
+    <Routes>
+      <Route path="/" element={<Navigation />}>
+        <Route index element={<Home />} />
+        <Route path="shop" element={<Shop/>}/>
+        <Route path="sign-in" element={<SignIn/>}/>
+      </Route>
+    </Routes>
   );
 };
 

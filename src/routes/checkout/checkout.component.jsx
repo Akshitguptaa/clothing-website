@@ -1,48 +1,48 @@
 import React, { useContext } from 'react';
 import { CartContext } from '../../context/cart.context';
-import './checkout.styles.scss';
 import CheckoutItems from '../../components/checkout-items/checkout-items.component';
+import { Container, Header, HeaderBlock, Total } from './checkout.styles';
 
 const Checkout = () => {
     const { cartItems } = useContext(CartContext);
 
-    var total=0;
+    var total = 0;
     {
-        cartItems.map((item) => (total+=(item.price*item.quantity)));
+        cartItems.map((item) => (total += (item.price * item.quantity)));
     }
 
     return (
-        <div className="checkout-container">
-            <div className="checkout-header">
-                <div className="header-block">
+        <Container>
+            <Header>
+                <HeaderBlock>
                     <span>Product</span>
-                </div>
-                <div className="header-block">
+                </HeaderBlock>
+                <HeaderBlock>
                     <span>Description</span>
-                </div>
-                <div className="header-block">
+                </HeaderBlock>
+                <HeaderBlock>
                     <span>Quantity</span>
-                </div>
-                <div className="header-block">
+                </HeaderBlock>
+                <HeaderBlock>
                     <span>Price</span>
-                </div>
-                <div className="header-block">
+                </HeaderBlock>
+                <HeaderBlock>
                     <span>Remove</span>
-                </div>
-            </div>
+                </HeaderBlock>
+            </Header>
 
             {
                 cartItems.map((cartitem) => {
                     const { name, id, price, quantity } = cartitem;
 
                     return (
-                        <CheckoutItems key={id} cartItem={cartitem}/>
+                        <CheckoutItems key={id} cartItem={cartitem} />
                     )
                 })
             }
 
-            <span className='total'>{`Total : ₹${total}`}</span>
-        </div>
+            <Total>{`Total : ₹${total}`}</Total>
+        </Container>
     )
 };
 

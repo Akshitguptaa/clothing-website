@@ -6,7 +6,7 @@ import "./index.scss";
 import App from "./App";
 
 import { UserProvider } from "./context/user.context";
-import { ProductProvider } from "./context/product.context";
+import { CategoriesProvider } from "./context/categories.context";
 import { CartProvider } from "./context/cart.context";
 
 import reportWebVitals from "./reportWebVitals";
@@ -17,9 +17,9 @@ root.render(
     <BrowserRouter>
       <UserProvider>
         <CartProvider>
-          <ProductProvider>
+          <CategoriesProvider>
             <App />
-          </ProductProvider>
+          </CategoriesProvider>
         </CartProvider>
       </UserProvider>
     </BrowserRouter>

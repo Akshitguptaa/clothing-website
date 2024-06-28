@@ -20,8 +20,10 @@ import {
   getDocs,
 } from "firebase/firestore";
 
+const API_KEY = process.env.API_KEY;
+
 const firebaseConfig = {
-  apiKey: "AIzaSyC6odzdmUizKuz-AX0FCzNaZAIh-BPBsSQ",
+  apiKey: API_KEY,
   authDomain: "clothing-db-be3fc.firebaseapp.com",
   projectId: "clothing-db-be3fc",
   storageBucket: "clothing-db-be3fc.appspot.com",

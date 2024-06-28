@@ -20,10 +20,8 @@ import {
   getDocs,
 } from "firebase/firestore";
 
-const API_KEY = process.env.API_KEY;
-
 const firebaseConfig = {
-  apiKey: API_KEY,
+  apiKey: "AIzaSyC6odzdmUizKuz-AX0FCzNaZAIh-BPBsSQ",
   authDomain: "clothing-db-be3fc.firebaseapp.com",
   projectId: "clothing-db-be3fc",
   storageBucket: "clothing-db-be3fc.appspot.com",
@@ -46,68 +44,88 @@ export const signInWithGoogleRedirect = () =>
 
 export const db = getFirestore();
 
-export const addCollectionAndDocuments=async (collectionKey,objectsToAdd)=>{
-  const collectionRef= collection(db,collectionKey);
-  const batch= writeBatch(db);
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
 
-  objectsToAdd.forEach((object)=>{
-    const docRef= doc(collectionRef,object.title.toLowerCase());
-    batch.set(docRef,object);
-  })
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(docRef, object);
+  });
 
-  await batch.commit();
-  console.log("done");
-}
-
-export const getCategoriesAndDocuments = async () => {
-  const collectionRef = collection(db, 'categories');
-  const querySnapshot = await getDocs(collectionRef);
-
-  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-    const { title, items } = docSnapshot.data();
-    acc[title.toLowerCase()] = items;
-    return acc;
-  }, {});
-
-  return categoryMap;
+  try {
+    await batch.commit();
+    console.log("Batch write successful");
+  } catch (error) {
+    console.error("Error committing batch:", error);
+    throw error; // Rethrow the error for handling upstream
+  }
 };
 
-export const createUserDocumentFromAuth = async (
-  userAuth,
-  additionalInformation = {}
-) => {
-  if (!userAuth) return;
+export const getCategoriesAndDocuments = async () => {
+  try {
+    const collectionRef = collection(db, 'categories');
+    const querySnapshot = await getDocs(collectionRef);
 
-  const userDocRef = doc(db, "users", userAuth.uid);
-  const userSnapshot = await getDoc(userDocRef);
+    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+      const { title, items } = docSnapshot.data();
+      acc[title.toLowerCase()] = items;
+      return acc;
+    }, {});
 
-  if (!userSnapshot.exists()) {
-    const { displayName, email } = userAuth;
-    const createdAt = new Date();
+    return categoryMap;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
+};
 
-    try {
+export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
+  try {
+    if (!userAuth) return;
+
+    const userDocRef = doc(db, "users", userAuth.uid);
+    const userSnapshot = await getDoc(userDocRef);
+
+    if (!userSnapshot.exists()) {
+      const { displayName, email } = userAuth;
+      const createdAt = new Date();
+
       await setDoc(userDocRef, {
         displayName,
         email,
         createdAt,
         ...additionalInformation,
       });
-    } catch (error) {
-      console.error("Error creating the user", error.message);
     }
+  } catch (error) {
+    console.error("Error creating user document:", error);
+    throw error;
   }
 };
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
-  if (!email || !password) return;
+  try {
+    if (!email || !password) throw new Error("Email and password are required.");
 
-  return await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    return userCredential.user;
+  } catch (error) {
+    console.error("Error creating user:", error);
+    throw error;
+  }
 };
 
 export const signInAuthUserWithEmailAndPassword = async (email, password) => {
-  if (!email || !password) return;
+  try {
+    if (!email || !password) throw new Error("Email and password are required.");
 
-  return await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    return userCredential.user;
+  } catch (error) {
+    console.error("Error signing in:", error);
+    throw error;
+  }
 };
 
 export const signOutUser = () => signOut(auth);

@@ -58,7 +58,7 @@ export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => 
     console.log("Batch write successful");
   } catch (error) {
     console.error("Error committing batch:", error);
-    throw error; // Rethrow the error for handling upstream
+    throw error; 
   }
 };
 

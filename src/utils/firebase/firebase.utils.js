@@ -63,22 +63,13 @@ export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => 
 };
 
 export const getCategoriesAndDocuments = async () => {
-  try {
-    const collectionRef = collection(db, 'categories');
-    const querySnapshot = await getDocs(collectionRef);
+  const collectionRef = collection(db, 'categories');
+  const q = query(collectionRef);
 
-    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-      const { title, items } = docSnapshot.data();
-      acc[title.toLowerCase()] = items;
-      return acc;
-    }, {});
-
-    return categoryMap;
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    throw error;
-  }
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((doc) => doc.data());
 };
+
 
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
   try {
